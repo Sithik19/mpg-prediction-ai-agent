@@ -1,154 +1,223 @@
-# Auto MPG Regression Analysis – LLM Agent
+# 🚗 MPG Prediction AI Agent
 
-## 📌 Overview
-This project implements an **end-to-end regression analysis and deployment workflow** using the **Auto MPG dataset**.  
-Multiple regression models are trained and evaluated, the **best-performing Support Vector Regression (SVR)** model is selected using **R² score**, serialized, and then **served through an LLM-powered agent** built with **LangChain** and **Groq**.
-
-The system allows users to interact in **natural language**, while the agent internally invokes a trained ML regression model to generate accurate predictions.
+An AI-powered machine learning system that predicts **vehicle fuel efficiency (Miles Per Gallon - MPG)** using automobile specifications.  
+The project integrates a **Support Vector Regression (SVR) model** with a **LangChain-based AI agent powered by Groq LLM**, enabling natural language interaction with the prediction system.
 
 ---
 
-## 🎯 Problem Statement
-Predict the **fuel efficiency (Miles Per Gallon – MPG)** of a car based on its technical specifications such as engine size, horsepower, weight, and origin.
+# 📌 Project Overview
 
-This is a **supervised regression problem**, as the target variable (MPG) is continuous.
+Fuel efficiency is an important factor in automotive engineering and environmental sustainability.  
+This project develops a **machine learning regression model** trained on the **Auto MPG dataset** to predict vehicle fuel efficiency based on engine and vehicle attributes.
+
+To enhance usability, the project includes an **AI agent interface** that allows users to request predictions using **natural language queries**.
 
 ---
 
-## 📊 Dataset: Auto MPG
+# 🎯 Objectives
 
-### Description
-The Auto MPG dataset contains automobile specifications along with their fuel efficiency values.  
-It is widely used for regression analysis and benchmarking machine learning models.
+- Build a **machine learning regression model** to predict vehicle MPG
+- Implement **data preprocessing and feature engineering**
+- Deploy a trained model using **serialized artifacts**
+- Integrate an **AI agent with LangChain + Groq LLM**
+- Enable **natural language queries for model predictions**
 
-### Features
+---
 
-| Feature | Description |
-|------|------------|
-| `cylinders` | Number of engine cylinders |
-| `displacement` | Engine displacement (cubic inches) |
-| `horsepower` | Engine horsepower |
-| `weight` | Vehicle weight (pounds) |
-| `acceleration` | Time to accelerate from 0–60 mph |
-| `model_year` | Year of manufacture |
-| `origin` | Manufacturing origin (1=USA, 2=Europe, 3=Japan) |
-| `car_name` | Name/model of the car |
+# 🧠 System Architecture
+
+```
+User Input
+     │
+     ▼
+LangChain AI Agent
+     │
+     ▼
+Groq LLM Processing
+     │
+     ▼
+Machine Learning Model (SVR)
+     │
+     ▼
+MPG Prediction Output
+```
+
+---
+
+# 📊 Dataset
+
+The project uses the **Auto MPG Dataset**, commonly used for regression tasks in machine learning.
+
+### Input Features
+- Cylinders
+- Displacement
+- Horsepower
+- Weight
+- Acceleration
+- Model Year
+- Origin
 
 ### Target Variable
-- **`mpg`** – Miles Per Gallon (continuous numerical value)
+**Miles Per Gallon (MPG)**
 
 ---
 
-## 🔍 Exploratory Data Analysis (EDA)
-Performed in **`Reg_model.ipynb`**, including:
-- Dataset inspection and cleaning
-- Feature distributions
-- Relationship analysis between features and MPG
-- Identification of non-linear patterns
-- Preparation of features for regression modeling
+# 🤖 Machine Learning Models Evaluated
 
-EDA revealed that MPG is strongly influenced by **weight, horsepower, displacement, and cylinders**, with **non-linear relationships**.
+Multiple regression algorithms were tested:
 
----
+- Linear Regression
+- Decision Tree Regression
+- Random Forest Regression
+- Support Vector Regression (SVR)
 
-## 🧠 Regression Modeling
-
-### Models Trained
-- Linear Regression  
-- Ridge Regression  
-- Lasso Regression  
-- Decision Tree Regressor  
-- Random Forest Regressor  
-- **Support Vector Regressor (SVR)**  
+After evaluation, **Support Vector Regression (SVR)** was selected as the final model due to superior performance.
 
 ---
 
-### Preprocessing Pipeline
+# ⚙️ Model Pipeline
 
-#### Label Encoding
-- Applied to `car_name`
-- Converts categorical text into numerical values
+The machine learning pipeline includes:
 
-#### Standard Scaling
-- Applied to numerical features using `StandardScaler`
-- Essential for distance-based models like SVR
-- Ensures all features are on a comparable scale
+1. Data preprocessing
+2. Feature encoding
+3. Feature scaling
+4. Model training
+5. Model evaluation
+6. Model serialization
 
----
+Saved model artifacts:
 
-### Model Evaluation
-**Metric Used:** **R² Score**
+```
+svm_model.pkl
+scaler.pkl
+encoder.pkl
+```
 
-- Measures how well the model explains variance in MPG
-- All models were compared using the same metric
-- **SVR achieved the highest R² score**
-
----
-
-## 🏆 Final Model: Support Vector Regression (SVR)
-SVR was chosen because:
-- Captures **non-linear relationships** effectively
-- Performs well with scaled features
-- Generalizes better on unseen data
-- Handles complex feature interactions
+These files allow the trained model to be reused without retraining.
 
 ---
 
-## 💾 Model Serialization
+# 🧠 AI Agent Integration
 
-| File | Description |
-|----|------------|
-| `svm_model.pkl` | Trained Support Vector Regression model |
-| `encoder.pkl` | LabelEncoder for `car_name` |
-| `scaler.pkl` | StandardScaler for numerical features |
+The system integrates an **LLM-based AI agent** using:
 
-These artifacts ensure **consistent preprocessing and inference** during prediction.
+- **LangChain**
+- **Groq API**
 
----
+The agent enables **natural language interaction with the machine learning model**.
 
-## 🤖 LLM Agent Integration
+### Example Query
 
-### Agent Architecture
-- **Framework:** LangChain  
-- **LLM Provider:** Groq  
-- **Model:** Qwen (via Groq API)  
-- **Agent Type:** Tool-using agent  
+```
+Predict MPG for a car with:
+8 cylinders
+350 horsepower
+weight 4000
+model year 1976
+```
 
-### Tool Functionality
-The LangChain tool:
-- Loads the serialized SVR model, encoder, and scaler
-- Encodes and scales user inputs
-- Performs regression prediction
-- Returns formatted prediction results
-
-The LLM decides **when to invoke the tool** and how to present the response.
+The agent interprets the query and calls the regression model to generate predictions.
 
 ---
 
-## ⚙️ Environment & Package Management
+# 🛠 Technologies Used
 
-This project uses **`uv`**, a high-performance Python package and environment manager.
+| Technology | Purpose |
+|-------------|---------|
+| Python | Core programming language |
+| Scikit-learn | Machine learning model development |
+| Pandas | Data processing |
+| NumPy | Numerical computation |
+| LangChain | AI agent framework |
+| Groq LLM | Natural language processing |
+| Jupyter Notebook | Model experimentation |
 
-### Setup
+---
+
+# 📂 Project Structure
+
+```
+mpg-prediction-ai-agent
+│
+├── Reg_model.ipynb
+├── svm_model.pkl
+├── scaler.pkl
+├── encoder.pkl
+│
+├── datasets
+│   └── dataset-1.csv
+│
+├── Agent
+│   ├── main.py
+│   ├── pyproject.toml
+│   └── README.md
+│
+└── README.md
+```
+
+---
+
+# ▶️ Installation & Setup
+
+## 1️⃣ Clone the repository
+
 ```bash
-uv init auto-mpg-regression-analysis-llm-agent
-.venv\Scripts\activate   # Windows
-uv add langchain langchain-groq scikit-learn pandas numpy
-```
-Sample input to the LLM:
-```
-Predict the output for the following features:
-4, 97.0, 46.0, 1835, 20.5, 70, 1, 'toyota corolla' and List the specification.
+git clone https://github.com/Sithik19/mpg-prediction-ai-agent.git
 ```
 
+## 2️⃣ Navigate to the project directory
 
-<img width="800" height="183" alt="image" src="https://github.com/user-attachments/assets/852d48f4-5ddc-422b-b139-3f37f8c29dd5" />
+```bash
+cd mpg-prediction-ai-agent
+```
 
+## 3️⃣ Install dependencies
 
+```bash
+pip install -r requirements.txt
+```
 
-Output of the LLM:
+---
 
+# 🚀 Running the Project
 
-<img width="850" height="422" alt="image" src="https://github.com/user-attachments/assets/74fc873e-2134-48b7-ba9e-bcb49776a8e3" />
+Run the AI agent:
 
+```bash
+python main.py
+```
 
+The system will start the **LLM-powered agent interface for MPG prediction**.
+
+---
+
+# 📈 Future Improvements
+
+- Build a **Streamlit web interface**
+- Deploy as a **REST API using FastAPI**
+- Add **model comparison dashboards**
+- Improve **feature engineering and hyperparameter tuning**
+- Deploy on **cloud platforms**
+
+---
+
+# 📚 Learning Outcomes
+
+This project demonstrates:
+
+- Machine learning regression modeling
+- Data preprocessing pipelines
+- Model serialization and reuse
+- Integration of ML models with LLM agents
+- Practical application of LangChain in ML systems
+
+---
+
+# 👨‍💻 Author
+
+**Sithik Ranjan V R**
+
+---
+
+# ⭐ If you found this project useful, consider giving it a star on GitHub!
